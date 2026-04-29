@@ -15,7 +15,7 @@
         .input-misura { background: #ffff00; }
         .input-misura input { width: 100%; border: none; background: transparent; text-align: center; font-size: 20px; font-weight: bold; outline: none; }
 
-        /* INDICATORE DI STATO */
+        /* NUOVO TESTO STATO */
         #stato-testo { font-size: 22px; font-weight: bold; color: #28a745; text-transform: uppercase; }
 
         /* TABELLA CONTENUTO */
@@ -30,7 +30,7 @@
         .verde-chiaro { background-color: #90EE90 !important; }
         .arancione-chiaro { background-color: #FFCC99 !important; }
 
-        input.readonly-input { border: none; background: transparent; text-align: center; width: 100%; font-size: 14px; pointer-events: none; font-weight: bold; }
+        input.readonly-input { border: none; background: transparent; text-align: center; width: 100%; font-size: 14px; pointer-events: none; }
     </style>
 </head>
 <body>
@@ -45,7 +45,7 @@
                 <td class="input-misura"><input type="number" id="m-altezza" value="50" oninput="aggiornaTutto()"></td>
             </tr>
         </table>
-        <!-- TESTO STATO PERSONALIZZATO -->
+        <!-- TESTO DINAMICO RICHIESTO -->
         <div id="stato-testo"></div>
     </div>
 
@@ -69,6 +69,7 @@
                 <td style="background:red;"><input type="number" class="t-base readonly-input" value="80"></td>
                 <td style="background:yellow;"><input type="number" class="t-altezza readonly-input" value="50"></td>
                 <td>€ <span class="res-mq">0.00</span></td>
+                <!-- CELLE NON INTERAGIBILI -->
                 <td>€ 20.00</td>
                 <td>€ 3.00</td>
                 <td class="bg-green">€ <span class="res-pezzo">0.00</span></td>
@@ -79,6 +80,7 @@
                 <td style="background:yellow;"><input type="number" class="t-base readonly-input" value="80"></td>
                 <td style="background:yellow;"><input type="number" class="t-altezza readonly-input" value="50"></td>
                 <td>€ <span class="res-mq">0.00</span></td>
+                <!-- CELLE NON INTERAGIBILI -->
                 <td>€ 20.00</td>
                 <td>€ 3.00</td>
                 <td class="bg-green">€ <span class="res-pezzo">0.00</span></td>
@@ -120,8 +122,8 @@
             // Calcoli
             const righe = document.querySelectorAll("#corpo-tabella tr");
             righe.forEach((riga, index) => {
-                const trasp = 20; // Valore fisso
-                const logo = 3;   // Valore fisso
+                const trasp = 20; 
+                const logo = 3;   
                 
                 let mqPrezzo = (index === 0) ? 76 : (76 * 1.25);
                 let totMq = ((b * h) / 10000) * mqPrezzo;
