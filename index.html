@@ -32,7 +32,7 @@
         .verde-standard td { background-color: #90EE90 !important; }
         .arancio-fuori-standard td { background-color: #FFCC99 !important; }
 
-        /* INPUT NON MODIFICABILI */
+        /* INPUT MISURE SOLA LETTURA */
         input.readonly-input { border: none; background: transparent; text-align: center; width: 100%; font-size: 14px; pointer-events: none; outline: none; }
     </style>
 </head>
@@ -69,9 +69,9 @@
                 <td><input type="number" class="t-base readonly-input" value="0"></td>
                 <td><input type="number" class="t-altezza readonly-input" value="0"></td>
                 <td>€ <span class="res-mq">0.00</span></td>
-                <!-- CELLE TRASPORTO E LOGO NON PIÙ MODIFICABILI -->
-                <td>€ <span class="val-trasp">20</span></td>
-                <td>€ <span class="val-logo">3</span></td>
+                <!-- CELLE TESTUALI NON MODIFICABILI -->
+                <td>€ 20</td>
+                <td>€ 3</td>
                 <td>€ <span class="res-pezzo">0.00</span></td>
                 <td>€ <span class="res-finale">0.00</span></td>
             </tr>
@@ -80,8 +80,8 @@
                 <td><input type="number" class="t-base readonly-input" value="0"></td>
                 <td><input type="number" class="t-altezza readonly-input" value="0"></td>
                 <td>€ <span class="res-mq">0.00</span></td>
-                <td>€ <span class="val-trasp">20</span></td>
-                <td>€ <span class="val-logo">3</span></td>
+                <td>€ 20</td>
+                <td>€ 3</td>
                 <td>€ <span class="res-pezzo">0.00</span></td>
                 <td>€ <span class="res-finale">0.00</span></td>
             </tr>
@@ -90,6 +90,8 @@
 
     <script>
         const misureStandard = [50, 60, 75, 85, 100, 115, 150, 200];
+        const COSTO_TRASPORTO = 20;
+        const COSTO_LOGO = 3;
 
         function aggiornaTutto() {
             const b = parseFloat(document.getElementById("m-base").value) || 0;
@@ -122,13 +124,9 @@
             }
 
             [r1, r2].forEach((riga, index) => {
-                // Valori fissi presi dagli span
-                const trasp = parseFloat(riga.querySelector(".val-trasp").innerText) || 0;
-                const logo = parseFloat(riga.querySelector(".val-logo").innerText) || 0;
-                
                 let pMq = (index === 0) ? 76 : (76 * 1.25);
                 let totMq = ((b * h) / 10000) * pMq;
-                let pPezzo = totMq + trasp + logo;
+                let pPezzo = totMq + COSTO_TRASPORTO + COSTO_LOGO;
                 let finale = pPezzo * 1.3 * 1.4;
 
                 riga.querySelector(".res-mq").innerText = totMq.toFixed(2);
