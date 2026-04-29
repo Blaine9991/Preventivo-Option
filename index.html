@@ -6,7 +6,7 @@
     <style>
         body { font-family: Arial, sans-serif; padding: 20px; }
         
-        /* SEZIONE MISURE IN ALTO */
+        /* SEZIONE INPUT ALTO */
         .sezione-misure { margin-bottom: 50px; display: flex; align-items: center; }
         .freccia-box { background: #333; color: #ffcc00; padding: 15px 30px; font-weight: bold; font-size: 18px; text-align: center; margin-right: 20px; }
         .tabella-misure { border-collapse: collapse; border: 2px solid #000; }
@@ -17,23 +17,23 @@
 
         #testo-stato { margin-left: 20px; font-size: 22px; font-weight: bold; color: #28a745; }
 
-        /* TABELLA CONTENUTO */
-        .main-table { border-collapse: collapse; width: 100%; }
+        /* TABELLA DATI - TUTTO BIANCO DI BASE */
+        .main-table { border-collapse: collapse; width: 100%; background-color: #ffffff; }
         .main-table th, .main-table td { border: 1px solid #000; padding: 8px; text-align: center; background-color: #ffffff; }
         
+        /* INTESTAZIONE (RESTA COME DA IMMAGINE) */
         .header-option { background: #000 !important; color: #ffff00 !important; font-weight: bold; font-size: 24px; }
         .header-grey { background: #d9d9d9 !important; font-size: 11px; }
         .header-orange { background: #ffc000 !important; font-weight: bold; }
-        .bg-green { background: #92d050 !important; font-weight: bold; }
-        .bg-ricarico { background: #76933c !important; color: white !important; }
-        .bg-risultato-finale { background: #c4d79b !important; }
+        .bg-green-header { background: #92d050 !important; font-weight: bold; }
+        .bg-ricarico-header { background: #76933c !important; color: white !important; }
 
-        /* Colori fissi per celle misure */
-        .colore-rosso { background-color: red !important; }
-        .colore-giallo { background-color: yellow !important; }
+        /* FORMATTAZIONE CONDIZIONALE RIGHE */
+        .riga-standard td { background-color: #90EE90 !important; } /* Verde Chiaro */
+        .riga-fuori-standard td { background-color: #FFCC99 !important; } /* Arancione Chiaro */
 
         input.readonly-input { border: none; background: transparent; text-align: center; width: 100%; font-size: 14px; pointer-events: none; }
-        input.edit-input { width: 50px; text-align: center; }
+        input.edit-input { width: 60px; text-align: center; border: 1px solid #ccc; }
     </style>
 </head>
 <body>
@@ -43,8 +43,8 @@
         <table class="tabella-misure">
             <tr><td colspan="2" class="head-cm">misura in CM</td></tr>
             <tr>
-                <td class="input-misura"><input type="number" id="m-base" value="80" oninput="aggiornaTutto()"></td>
-                <td class="input-misura"><input type="number" id="m-altezza" value="50" oninput="aggiornaTutto()"></td>
+                <td class="input-misura"><input type="number" id="m-base" value="0" oninput="aggiornaTutto()"></td>
+                <td class="input-misura"><input type="number" id="m-altezza" value="0" oninput="aggiornaTutto()"></td>
             </tr>
         </table>
         <div id="testo-stato"></div>
@@ -59,30 +59,30 @@
                 <th class="header-orange">€ 76,00</th>
                 <th class="header-grey">trasporto</th>
                 <th class="header-grey">costo<br>elaborazione logo</th>
-                <th class="bg-green">€/pezzo</th>
-                <th class="bg-ricarico">RICARICO<br>+30% +40%</th>
+                <th class="bg-green-header">€/pezzo</th>
+                <th class="bg-ricarico-header">RICARICO<br>+30% +40%</th>
             </tr>
         </thead>
         <tbody id="corpo-tabella">
             <tr id="riga1">
-                <td class="cella-dinamica" style="text-align:left; font-size:12px; width:300px;">con 1 lato 50-60-75-85-100-115-150-200</td>
-                <td class="colore-rosso"><input type="number" class="t-base readonly-input" value="80"></td>
-                <td class="colore-giallo"><input type="number" class="t-altezza readonly-input" value="50"></td>
-                <td class="cella-dinamica">€ <span class="res-mq">0.00</span></td>
-                <td class="cella-dinamica">€ <input type="number" class="t-trasp edit-input" value="20" oninput="aggiornaTutto()"></td>
-                <td class="cella-dinamica">€ <input type="number" class="t-logo edit-input" value="3" oninput="aggiornaTutto()"></td>
-                <td class="bg-green">€ <span class="res-pezzo">0.00</span></td>
-                <td class="bg-risultato-finale">€ <span class="res-finale">0.00</span></td>
+                <td style="text-align:left; font-size:12px; width:300px;">con 1 lato 50-60-75-85-100-115-150-200</td>
+                <td><input type="number" class="t-base readonly-input" value="0"></td>
+                <td><input type="number" class="t-altezza readonly-input" value="0"></td>
+                <td>€ <span class="res-mq">0.00</span></td>
+                <td>€ <input type="number" class="t-trasp edit-input" value="20" oninput="aggiornaTutto()"></td>
+                <td>€ <input type="number" class="t-logo edit-input" value="3" oninput="aggiornaTutto()"></td>
+                <td>€ <span class="res-pezzo">0.00</span></td>
+                <td>€ <span class="res-finale">0.00</span></td>
             </tr>
             <tr id="riga2">
-                <td class="cella-dinamica" style="text-align:left; font-size:12px;">fuori standard (prezzo +25%)</td>
-                <td class="colore-giallo"><input type="number" class="t-base readonly-input" value="80"></td>
-                <td class="colore-giallo"><input type="number" class="t-altezza readonly-input" value="50"></td>
-                <td class="cella-dinamica">€ <span class="res-mq">0.00</span></td>
-                <td class="cella-dinamica">€ <input type="number" class="t-trasp edit-input" value="20" oninput="aggiornaTutto()"></td>
-                <td class="cella-dinamica">€ <input type="number" class="t-logo edit-input" value="3" oninput="aggiornaTutto()"></td>
-                <td class="bg-green">€ <span class="res-pezzo">0.00</span></td>
-                <td class="bg-risultato-finale">€ <span class="res-finale">0.00</span></td>
+                <td style="text-align:left; font-size:12px;">fuori standard (prezzo +25%)</td>
+                <td><input type="number" class="t-base readonly-input" value="0"></td>
+                <td><input type="number" class="t-altezza readonly-input" value="0"></td>
+                <td>€ <span class="res-mq">0.00</span></td>
+                <td>€ <input type="number" class="t-trasp edit-input" value="20" oninput="aggiornaTutto()"></td>
+                <td>€ <input type="number" class="t-logo edit-input" value="3" oninput="aggiornaTutto()"></td>
+                <td>€ <span class="res-pezzo">0.00</span></td>
+                <td>€ <span class="res-finale">0.00</span></td>
             </tr>
         </tbody>
     </table>
@@ -95,39 +95,51 @@
             const h = parseFloat(document.getElementById("m-altezza").value) || 0;
             const testoStato = document.getElementById("testo-stato");
             
+            // Sincronizza i valori nelle celle della tabella
             document.querySelectorAll(".t-base").forEach(el => el.value = b);
             document.querySelectorAll(".t-altezza").forEach(el => el.value = h);
 
             const riga1 = document.getElementById("riga1");
             const riga2 = document.getElementById("riga2");
-            const dinamiche1 = riga1.querySelectorAll(".cella-dinamica");
-            const dinamiche2 = riga2.querySelectorAll(".cella-dinamica");
-
-            // Reset Sfondi celle dinamiche
-            dinamiche1.forEach(td => td.style.backgroundColor = "#ffffff");
-            dinamiche2.forEach(td => td.style.backgroundColor = "#ffffff");
+            
+            // Reset totale: riga bianca
+            riga1.className = "";
+            riga2.className = "";
             testoStato.innerText = "";
+
+            // Se i valori sono 0, non applicare colori
+            if (b === 0 && h === 0) return;
 
             const unoStandard = misureStandard.includes(b) || misureStandard.includes(h);
             const eccede200 = b > 200 || h > 200;
 
+            // LOGICA FORMATTAZIONE CONDIZIONALE
             if (unoStandard && !eccede200) {
-                dinamiche1.forEach(td => td.style.backgroundColor = "#90EE90");
+                // Caso Standard: Solo Riga 1 Verde
+                riga1.className = "riga-standard";
                 testoStato.innerText = "MISURA STANDARD";
+                testoStato.style.color = "#28a745";
             } else {
-                dinamiche2.forEach(td => td.style.backgroundColor = "#FFCC99");
+                // Caso Fuori Standard: Solo Riga 2 Arancione
+                riga2.className = "riga-fuori-standard";
                 testoStato.innerText = "MISURA NON STANDARD";
+                testoStato.style.color = "#e67e22";
             }
 
-            // Calcoli
-            const righe = document.querySelectorAll("#corpo-tabella tr");
+            // Calcoli Matematici
+            const righe = [riga1, riga2];
             righe.forEach((riga, index) => {
                 const trasp = parseFloat(riga.querySelector(".t-trasp").value) || 0;
                 const logo = parseFloat(riga.querySelector(".t-logo").value) || 0;
                 
-                let mqPrezzo = (index === 0) ? 76 : (76 * 1.25);
-                let totMq = ((b * h) / 10000) * mqPrezzo;
+                // Riga 2 ha ricarico +25% sul prezzo base al mq
+                let prezzoBaseMq = 76;
+                if (index === 1) prezzoBaseMq = 76 * 1.25;
+
+                let mq = (b * h) / 10000;
+                let totMq = mq * prezzoBaseMq;
                 let prezzoPezzo = totMq + trasp + logo;
+                // Ricarico finale +30% poi +40% (coefficiente 1.82)
                 let finale = prezzoPezzo * 1.3 * 1.4;
 
                 riga.querySelector(".res-mq").innerText = totMq.toFixed(2);
@@ -136,6 +148,7 @@
             });
         }
 
+        // Esegui al caricamento
         window.onload = aggiornaTutto;
     </script>
 </body>
