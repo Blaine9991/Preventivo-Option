@@ -16,23 +16,22 @@
         .input-misura input { width: 100%; border: none; background: transparent; text-align: center; font-size: 20px; font-weight: bold; outline: none; }
 
         /* SCRITTA DINAMICA ACCANTO ALLE MISURE */
-        #testo-stato { margin-left: 20px; font-size: 20px; font-weight: bold; color: #28a745; }
+        #testo-stato { margin-left: 20px; font-size: 20px; font-weight: bold; color: #28a745; min-width: 300px; }
 
         /* TABELLA PRINCIPALE */
         .main-table { border-collapse: collapse; width: 100%; }
-        .main-table th, .main-table td { border: 1px solid #000; padding: 8px; text-align: center; }
+        .main-table th, .main-table td { border: 1px solid #000; padding: 8px; text-align: center; background-color: #fff; }
         
-        /* COLORI ORIGINALI RIPRISTINATI */
         .header-option { background: #000 !important; color: #ffff00 !important; font-weight: bold; font-size: 24px; }
-        .header-grey { background: #d9d9d9; font-size: 11px; }
-        .header-orange { background: #ffc000; font-weight: bold; }
-        .bg-green { background: #92d050; font-weight: bold; }
+        .header-grey { background: #d9d9d9 !important; font-size: 11px; }
+        .header-orange { background: #ffc000 !important; font-weight: bold; }
+        .bg-green { background: #92d050 !important; font-weight: bold; }
         .bg-ricarico { background: #76933c !important; color: white !important; }
-        .bg-green-light { background: #c4d79b; }
+        .bg-green-light { background: #c4d79b !important; }
 
-        /* FORMATTAZIONE CONDIZIONALE RIGHE */
-        .verde-chiaro { background-color: #90EE90 !important; }
-        .arancione-chiaro { background-color: #FFCC99 !important; }
+        /* FORMATTAZIONE CONDIZIONALE MIRATA SOLO ALLE CELLE NON COLORATE */
+        .verde-chiaro td:not([style*="background"]) { background-color: #90EE90 !important; }
+        .arancione-chiaro td:not([style*="background"]) { background-color: #FFCC99 !important; }
 
         input.readonly-input { border: none; background: transparent; text-align: center; width: 100%; font-size: 14px; pointer-events: none; }
         input.edit-input { width: 50px; text-align: center; }
@@ -49,6 +48,7 @@
                 <td class="input-misura"><input type="number" id="m-altezza" value="50" oninput="aggiornaTutto()"></td>
             </tr>
         </table>
+        <!-- Qui appariranno le scritte STANDARD / NON STANDARD -->
         <div id="testo-stato"></div>
     </div>
 
@@ -103,9 +103,7 @@
             const riga1 = document.getElementById("riga1");
             const riga2 = document.getElementById("riga2");
             
-            // Reset colori righe
-            riga1.style.backgroundColor = "";
-            riga2.style.backgroundColor = "";
+            // Reset classi
             riga1.classList.remove("verde-chiaro");
             riga2.classList.remove("arancione-chiaro");
 
