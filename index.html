@@ -6,6 +6,7 @@
     <style>
         body { font-family: Arial, sans-serif; padding: 20px; }
         
+        /* SEZIONE MISURE IN ALTO */
         .sezione-misure { margin-bottom: 50px; display: flex; align-items: center; }
         .freccia-box { background: #333; color: #ffcc00; padding: 15px 30px; font-weight: bold; font-size: 18px; text-align: center; margin-right: 20px; }
         .tabella-misure { border-collapse: collapse; border: 2px solid #000; }
@@ -14,23 +15,22 @@
         .input-misura { background: #ffff00; }
         .input-misura input { width: 100%; border: none; background: transparent; text-align: center; font-size: 20px; font-weight: bold; outline: none; }
 
-        /* Scritte Standard / Non Standard */
         #testo-stato { margin-left: 20px; font-size: 22px; font-weight: bold; color: #28a745; }
 
+        /* TABELLA CONTENUTO */
         .main-table { border-collapse: collapse; width: 100%; }
-        .main-table th, .main-table td { border: 1px solid #000; padding: 8px; text-align: center; }
+        .main-table th, .main-table td { border: 1px solid #000; padding: 8px; text-align: center; background-color: #ffffff; }
         
-        /* Ripristino stili originali richiesti */
         .header-option { background: #000 !important; color: #ffff00 !important; font-weight: bold; font-size: 24px; }
-        .header-grey { background: #d9d9d9; font-size: 11px; }
-        .header-orange { background: #ffc000; font-weight: bold; }
-        .bg-green { background: #92d050; font-weight: bold; }
+        .header-grey { background: #d9d9d9 !important; font-size: 11px; }
+        .header-orange { background: #ffc000 !important; font-weight: bold; }
+        .bg-green { background: #92d050 !important; font-weight: bold; }
         .bg-ricarico { background: #76933c !important; color: white !important; }
-        .bg-risultato-finale { background: #c4d79b; }
+        .bg-risultato-finale { background: #c4d79b !important; }
 
-        /* Formattazione condizionale che non sovrascrive le celle colorate */
-        .riga-standard td:not([style*="background"]) { background-color: #90EE90 !important; }
-        .riga-fuori-standard td:not([style*="background"]) { background-color: #FFCC99 !important; }
+        /* Colori fissi per celle misure */
+        .colore-rosso { background-color: red !important; }
+        .colore-giallo { background-color: yellow !important; }
 
         input.readonly-input { border: none; background: transparent; text-align: center; width: 100%; font-size: 14px; pointer-events: none; }
         input.edit-input { width: 50px; text-align: center; }
@@ -65,22 +65,22 @@
         </thead>
         <tbody id="corpo-tabella">
             <tr id="riga1">
-                <td style="text-align:left; font-size:12px; width:300px;">con 1 lato 50-60-75-85-100-115-150-200</td>
-                <td style="background:red !important;"><input type="number" class="t-base readonly-input" value="80"></td>
-                <td style="background:yellow !important;"><input type="number" class="t-altezza readonly-input" value="50"></td>
-                <td>€ <span class="res-mq">0.00</span></td>
-                <td>€ <input type="number" class="t-trasp edit-input" value="20" oninput="aggiornaTutto()"></td>
-                <td>€ <input type="number" class="t-logo edit-input" value="3" oninput="aggiornaTutto()"></td>
+                <td class="cella-dinamica" style="text-align:left; font-size:12px; width:300px;">con 1 lato 50-60-75-85-100-115-150-200</td>
+                <td class="colore-rosso"><input type="number" class="t-base readonly-input" value="80"></td>
+                <td class="colore-giallo"><input type="number" class="t-altezza readonly-input" value="50"></td>
+                <td class="cella-dinamica">€ <span class="res-mq">0.00</span></td>
+                <td class="cella-dinamica">€ <input type="number" class="t-trasp edit-input" value="20" oninput="aggiornaTutto()"></td>
+                <td class="cella-dinamica">€ <input type="number" class="t-logo edit-input" value="3" oninput="aggiornaTutto()"></td>
                 <td class="bg-green">€ <span class="res-pezzo">0.00</span></td>
                 <td class="bg-risultato-finale">€ <span class="res-finale">0.00</span></td>
             </tr>
             <tr id="riga2">
-                <td style="text-align:left; font-size:12px;">fuori standard (prezzo +25%)</td>
-                <td style="background:yellow !important;"><input type="number" class="t-base readonly-input" value="80"></td>
-                <td style="background:yellow !important;"><input type="number" class="t-altezza readonly-input" value="50"></td>
-                <td>€ <span class="res-mq">0.00</span></td>
-                <td>€ <input type="number" class="t-trasp edit-input" value="20" oninput="aggiornaTutto()"></td>
-                <td>€ <input type="number" class="t-logo edit-input" value="3" oninput="aggiornaTutto()"></td>
+                <td class="cella-dinamica" style="text-align:left; font-size:12px;">fuori standard (prezzo +25%)</td>
+                <td class="colore-giallo"><input type="number" class="t-base readonly-input" value="80"></td>
+                <td class="colore-giallo"><input type="number" class="t-altezza readonly-input" value="50"></td>
+                <td class="cella-dinamica">€ <span class="res-mq">0.00</span></td>
+                <td class="cella-dinamica">€ <input type="number" class="t-trasp edit-input" value="20" oninput="aggiornaTutto()"></td>
+                <td class="cella-dinamica">€ <input type="number" class="t-logo edit-input" value="3" oninput="aggiornaTutto()"></td>
                 <td class="bg-green">€ <span class="res-pezzo">0.00</span></td>
                 <td class="bg-risultato-finale">€ <span class="res-finale">0.00</span></td>
             </tr>
@@ -100,20 +100,22 @@
 
             const riga1 = document.getElementById("riga1");
             const riga2 = document.getElementById("riga2");
-            
-            // Reset classi e testo
-            riga1.classList.remove("riga-standard");
-            riga2.classList.remove("riga-fuori-standard");
+            const dinamiche1 = riga1.querySelectorAll(".cella-dinamica");
+            const dinamiche2 = riga2.querySelectorAll(".cella-dinamica");
+
+            // Reset Sfondi celle dinamiche
+            dinamiche1.forEach(td => td.style.backgroundColor = "#ffffff");
+            dinamiche2.forEach(td => td.style.backgroundColor = "#ffffff");
             testoStato.innerText = "";
 
             const unoStandard = misureStandard.includes(b) || misureStandard.includes(h);
             const eccede200 = b > 200 || h > 200;
 
             if (unoStandard && !eccede200) {
-                riga1.classList.add("riga-standard");
+                dinamiche1.forEach(td => td.style.backgroundColor = "#90EE90");
                 testoStato.innerText = "MISURA STANDARD";
             } else {
-                riga2.classList.add("riga-fuori-standard");
+                dinamiche2.forEach(td => td.style.backgroundColor = "#FFCC99");
                 testoStato.innerText = "MISURA NON STANDARD";
             }
 
