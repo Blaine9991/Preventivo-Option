@@ -2,111 +2,115 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <title>Calcolatore Asciugapassi 2025 - FLOORMAD</title>
+    <title>Preventivatore ASCIUGAPASSI</title>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background-color: #f4f7f6; padding: 20px; color: #333; }
-        .container { max-width: 1000px; background: white; padding: 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); margin: auto; }
-        .header { border-bottom: 3px solid #0056b3; margin-bottom: 20px; padding-bottom: 10px; }
-        .inputs { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 20px; }
-        label { font-weight: bold; display: block; margin-bottom: 8px; }
-        input { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; font-size: 16px; box-sizing: border-box; }
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-        th, td { border: 1px solid #e0e0e0; padding: 12px; text-align: center; }
-        th { background-color: #0056b3; color: white; font-size: 0.9em; }
-        .base-val { background-color: #fff9c4; font-weight: bold; }
-        .markup-val { background-color: #e3f2fd; font-weight: bold; color: #1565c0; }
-        .fixed-cost { color: #666; font-size: 0.9em; }
+        body { font-family: sans-serif; padding: 20px; background: #f4f4f4; }
+        .box { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; min-width: 1000px; }
+        th, td { border: 1px solid #aaa; padding: 8px; text-align: center; font-size: 13px; }
+        
+        /* Colori Tabella Originale */
+        .header-option { background: #333; color: yellow; font-weight: bold; font-size: 18px; }
+        .bg-yellow { background: #ffeb3b; }
+        .bg-orange { background: #ffc107; }
+        .bg-grey { background: #bdbdbd; }
+        .bg-green { background: #8bc34a; font-weight: bold; }
+        .bg-red { background: #f44336; color: black; font-weight: bold; }
+        
+        input { width: 60px; padding: 4px; text-align: center; border: 1px solid #999; }
+        .res-bold { font-weight: bold; }
+        .desc { text-align: left; padding-left: 10px; width: 250px; }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <div class="header">
-        <h2>Listino ZERB ASCIUGA ALLU - 2025</h2>
-    </div>
+<div class="box">
+    <h2>Imposta Misura Personalizzata</h2>
     
-    <div class="inputs">
-        <div>
-            <label>LARGHEZZA (CM) [E4]</label>
-            <input type="number" id="dimE4" value="80" oninput="runCalc()">
-        </div>
-        <div>
-            <label>LUNGHEZZA (CM) [G4]</label>
-            <input type="number" id="dimG4" value="50" oninput="runCalc()">
-        </div>
-    </div>
-
     <table>
         <thead>
             <tr>
-                <th>DESCRIZIONE</th>
-                <th>MQ</th>
-                <th>€/MQ</th>
-                <th>VALORE MQ</th>
-                <th>TRASPORTO</th>
-                <th>LOGO</th>
-                <th>€/PEZZO (I8/I9)</th>
-                <th>RIC. +30%/+40% (J)</th>
+                <th colspan="3" class="header-option">OPTION</th>
+                <th class="bg-grey">€/mq</th>
+                <th class="bg-orange">76,00</th>
+                <th class="bg-grey">trasporto</th>
+                <th class="bg-grey">costo elaborazione logo</th>
+                <th colspan="2" class="bg-green">PREZZO FINALE</th>
+            </tr>
+            <tr>
+                <th>Descrizione</th>
+                <th class="bg-yellow">Base (cm)</th>
+                <th class="bg-yellow">Altezza (cm)</th>
+                <th class="bg-grey">Prezzo mq</th>
+                <th class="bg-grey">Tot. mq</th>
+                <th class="bg-grey">Trasporto</th>
+                <th class="bg-grey">Logo</th>
+                <th class="bg-green">€/pezzo (Base)</th>
+                <th class="bg-green" style="background: #2e7d32; color: white;">RIC. +30% +40%</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody id="lista-articoli">
+            <!-- Riga Standard -->
             <tr>
-                <td style="text-align:left">Qualità Stampa Standard 50dpi</td>
-                <td id="mq_val">0.40</td>
-                <td>76.00</td>
-                <td id="val_mq_std">30.40</td>
-                <td class="fixed-cost">20.00</td>
-                <td class="fixed-cost">3.00</td>
-                <td class="base-val">€ <span id="total_std">53.40</span></td>
-                <td class="markup-val">€ <span id="ric_std">97.19</span></td>
+                <td class="desc">con 1 lato 50-60-75-85-100-115-150-200</td>
+                <td class="bg-red"><input type="number" class="base" value="80" oninput="calcola()"></td>
+                <td class="bg-yellow"><input type="number" class="altezza" value="50" oninput="calcola()"></td>
+                <td>€ 76,00</td>
+                <td class="res-mq">€ 0.00</td>
+                <td><input type="number" class="trasp" value="20" oninput="calcola()"></td>
+                <td><input type="number" class="logo" value="3" oninput="calcola()"></td>
+                <td class="bg-green res-base">€ 0.00</td>
+                <td class="bg-green res-ricarico" style="background: #c8e6c9;">€ 0.00</td>
             </tr>
+            <!-- Riga Fuori Standard -->
             <tr>
-                <td style="text-align:left">Fuori Standard (+25%)</td>
-                <td id="mq_val_fs">0.40</td>
-                <td>95.00</td>
-                <td id="val_mq_fs">38.00</td>
-                <td class="fixed-cost">20.00</td>
-                <td class="fixed-cost">3.00</td>
-                <td class="base-val">€ <span id="total_fs">61.00</span></td>
-                <td class="markup-val">€ <span id="ric_fs">111.02</span></td>
+                <td class="desc">fuori standard (prezzo +25%)</td>
+                <td class="bg-yellow"><input type="number" class="base" value="80" oninput="calcola()"></td>
+                <td class="bg-yellow"><input type="number" class="altezza" value="50" oninput="calcola()"></td>
+                <td>€ 95,00</td>
+                <td class="res-mq">€ 0.00</td>
+                <td><input type="number" class="trasp" value="20" oninput="calcola()"></td>
+                <td><input type="number" class="logo" value="3" oninput="calcola()"></td>
+                <td class="bg-green res-base">€ 0.00</td>
+                <td class="bg-green res-ricarico" style="background: #c8e6c9;">€ 0.00</td>
             </tr>
         </tbody>
     </table>
 </div>
 
 <script>
-    function runCalc() {
-        const e4 = parseFloat(document.getElementById('dimE4').value) || 0;
-        const g4 = parseFloat(document.getElementById('dimG4').value) || 0;
-        
-        const mq = (e4 * g4) / 10000;
-        const trasporto = 20.00;
-        const logo = 3.00;
-        const coeff = 1.82;
+    function calcola() {
+        const righe = document.querySelectorAll("#lista-articoli tr");
+        const mqPrezzoBase = 76.00;
 
-        // Calcoli Standard
-        const valMqStd = mq * 76.00;
-        const totalI8 = valMqStd + trasporto + logo;
-        const totalJ8 = totalI8 * coeff;
+        righe.forEach((riga, index) => {
+            const b = parseFloat(riga.querySelector(".base").value) || 0;
+            const h = parseFloat(riga.querySelector(".altezza").value) || 0;
+            const trasp = parseFloat(riga.querySelector(".trasp").value) || 0;
+            const logo = parseFloat(riga.querySelector(".logo").value) || 0;
+            
+            // Determina il prezzo al mq (standard o +25%)
+            let prezzoMqEffettivo = (index === 0) ? mqPrezzoBase : (mqPrezzoBase * 1.25);
+            
+            // Calcolo area in mq (cm * cm / 10000)
+            let areaMq = (b * h) / 10000;
+            let totaleMq = areaMq * prezzoMqEffettivo;
+            
+            // €/pezzo originale (Tabella)
+            let prezzoPezzoBase = totaleMq + trasp + logo;
+            
+            // Tuo Ricarico: (Base + Trasp + Logo) * 1.3 * 1.4
+            let prezzoRicaricato = prezzoPezzoBase * 1.3 * 1.4;
 
-        // Calcoli Fuori Standard
-        const valMqFS = mq * 95.00;
-        const totalI9 = valMqFS + trasporto + logo;
-        const totalJ9 = totalI9 * coeff;
-
-        // Aggiornamento UI
-        document.getElementById('mq_val').innerText = mq.toFixed(2);
-        document.getElementById('mq_val_fs').innerText = mq.toFixed(2);
-        document.getElementById('val_mq_std').innerText = valMqStd.toFixed(2);
-        document.getElementById('val_mq_fs').innerText = valMqFS.toFixed(2);
-        
-        document.getElementById('total_std').innerText = totalI8.toFixed(2);
-        document.getElementById('total_fs').innerText = totalI9.toFixed(2);
-        
-        document.getElementById('ric_std').innerText = totalJ8.toFixed(2);
-        document.getElementById('ric_fs').innerText = totalJ9.toFixed(2);
+            // Aggiornamento Campi
+            riga.querySelector(".res-mq").innerText = "€ " + totaleMq.toFixed(2);
+            riga.querySelector(".res-base").innerText = "€ " + prezzoPezzoBase.toFixed(2);
+            riga.querySelector(".res-ricarico").innerText = "€ " + prezzoRicaricato.toFixed(2);
+        });
     }
-    window.onload = runCalc;
+
+    // Esegui calcolo iniziale
+    window.onload = calcola;
 </script>
 
 </body>
