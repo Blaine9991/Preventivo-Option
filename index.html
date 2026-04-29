@@ -17,15 +17,15 @@
 
         /* TABELLA CONTENUTO */
         .main-table { border-collapse: collapse; width: 100%; }
-        .main-table th, .main-table td { border: 1px solid #000; padding: 8px; text-align: center; }
+        .main-table th, .main-table td { border: 1px solid #000; padding: 8px; text-align: center; background-color: #ffffff; }
         .header-option { background: #000; color: #ffff00; font-weight: bold; font-size: 24px; }
         .header-grey { background: #d9d9d9; font-size: 11px; }
         .header-orange { background: #ffc000; font-weight: bold; }
         .bg-green { background: #92d050; font-weight: bold; }
         
         /* FORMATTAZIONE CONDIZIONALE */
-        .verde-chiaro { background-color: #90EE90 !important; }
-        .arancione-chiaro { background-color: #FFCC99 !important; }
+        .verde-chiaro td { background-color: #90EE90 !important; }
+        .arancione-chiaro td { background-color: #FFCC99 !important; }
 
         input.readonly-input { border: none; background: transparent; text-align: center; width: 100%; font-size: 14px; pointer-events: none; }
         input.edit-input { width: 50px; text-align: center; }
@@ -98,15 +98,20 @@
             const riga1 = document.getElementById("riga1");
             const riga2 = document.getElementById("riga2");
             
+            // Reset classi
             riga1.classList.remove("verde-chiaro");
             riga2.classList.remove("arancione-chiaro");
 
             const unoStandard = misureStandard.includes(b) || misureStandard.includes(h);
             const eccede200 = b > 200 || h > 200;
 
+            // LOGICA RICHIESTA:
+            // 1. Se almeno uno è standard E nessuno eccede 200 -> Riga 1 Verde
             if (unoStandard && !eccede200) {
                 riga1.classList.add("verde-chiaro");
-            } else if (!unoStandard || eccede200) {
+            } 
+            // 2. Se nessuno è standard O se uno/entrambi eccedono 200 -> Riga 2 Arancione
+            else if (!unoStandard || eccede200) {
                 riga2.classList.add("arancione-chiaro");
             }
 
