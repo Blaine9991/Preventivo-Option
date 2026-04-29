@@ -17,11 +17,11 @@
 
         #testo-stato { margin-left: 20px; font-size: 22px; font-weight: bold; }
 
-        /* TABELLA FINALE */
+        /* TABELLA FINALE A DUE COLONNE */
         .main-table { border-collapse: collapse; width: 100%; border: 1px solid #000; }
         .main-table th, .main-table td { border: 1px solid #000; padding: 15px; text-align: center; background-color: #ffffff; }
         
-        .header-option { background: #000 !important; color: #ffff00 !important; font-weight: bold; font-size: 24px; width: 60%; }
+        .header-option { background: #000 !important; color: #ffff00 !important; font-weight: bold; font-size: 24px; width: 70%; }
         .header-prz-vendita { background: #76933c !important; color: white !important; font-weight: bold; font-size: 20px; }
 
         /* FORMATTAZIONE CONDIZIONALE */
@@ -74,6 +74,7 @@
             const r1 = document.getElementById("riga1");
             const r2 = document.getElementById("riga2");
 
+            // Reset classi e testo
             r1.className = "";
             r2.className = "";
             testoStato.innerText = "";
@@ -96,6 +97,7 @@
                 testoStato.style.color = "#e67e22";
             }
 
+            // Calcolo del prezzo finale (invisibile ma funzionante)
             [r1, r2].forEach((riga, index) => {
                 let pMq = (index === 0) ? 76 : (76 * 1.25);
                 let mqArea = (b * h) / 10000;
