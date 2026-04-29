@@ -9,14 +9,14 @@
         /* SEZIONE MISURE IN ALTO SEPARATA */
         .sezione-misure { margin-bottom: 50px; display: flex; align-items: center; }
         .freccia-box { background: #333; color: #ffcc00; padding: 15px 30px; font-weight: bold; font-size: 18px; text-align: center; margin-right: 20px; }
-        .tabella-misure { border-collapse: collapse; border: 2px solid #000; margin-right: 20px; }
+        .tabella-misure { border-collapse: collapse; border: 2px solid #000; }
         .tabella-misure td { border: 1px solid #000; padding: 5px; text-align: center; width: 120px; }
         .head-cm { background: #ffc000; font-weight: bold; }
         .input-misura { background: #ffff00; }
         .input-misura input { width: 100%; border: none; background: transparent; text-align: center; font-size: 20px; font-weight: bold; outline: none; }
 
-        /* NUOVO TESTO STATO */
-        #stato-testo { font-size: 22px; font-weight: bold; color: #28a745; text-transform: uppercase; }
+        /* NUOVO STILE PER LE SCRITTE DINAMICHE */
+        #testo-stato { margin-left: 20px; font-size: 22px; font-weight: bold; color: #28a745; }
 
         /* TABELLA CONTENUTO */
         .main-table { border-collapse: collapse; width: 100%; }
@@ -31,6 +31,7 @@
         .arancione-chiaro { background-color: #FFCC99 !important; }
 
         input.readonly-input { border: none; background: transparent; text-align: center; width: 100%; font-size: 14px; pointer-events: none; }
+        input.edit-input { width: 50px; text-align: center; }
     </style>
 </head>
 <body>
@@ -45,8 +46,8 @@
                 <td class="input-misura"><input type="number" id="m-altezza" value="50" oninput="aggiornaTutto()"></td>
             </tr>
         </table>
-        <!-- TESTO DINAMICO RICHIESTO -->
-        <div id="stato-testo"></div>
+        <!-- ELEMENTO PER LE SCRITTE STANDARD / NON STANDARD -->
+        <div id="testo-stato"></div>
     </div>
 
     <!-- TABELLA PRINCIPALE REPLICATA -->
@@ -69,9 +70,8 @@
                 <td style="background:red;"><input type="number" class="t-base readonly-input" value="80"></td>
                 <td style="background:yellow;"><input type="number" class="t-altezza readonly-input" value="50"></td>
                 <td>€ <span class="res-mq">0.00</span></td>
-                <!-- CELLE NON INTERAGIBILI -->
-                <td>€ 20.00</td>
-                <td>€ 3.00</td>
+                <td>€ <input type="number" class="t-trasp edit-input" value="20" oninput="aggiornaTutto()"></td>
+                <td>€ <input type="number" class="t-logo edit-input" value="3" oninput="aggiornaTutto()"></td>
                 <td class="bg-green">€ <span class="res-pezzo">0.00</span></td>
                 <td class="bg-green" style="background:#c4d79b;">€ <span class="res-finale">0.00</span></td>
             </tr>
@@ -80,9 +80,8 @@
                 <td style="background:yellow;"><input type="number" class="t-base readonly-input" value="80"></td>
                 <td style="background:yellow;"><input type="number" class="t-altezza readonly-input" value="50"></td>
                 <td>€ <span class="res-mq">0.00</span></td>
-                <!-- CELLE NON INTERAGIBILI -->
-                <td>€ 20.00</td>
-                <td>€ 3.00</td>
+                <td>€ <input type="number" class="t-trasp edit-input" value="20" oninput="aggiornaTutto()"></td>
+                <td>€ <input type="number" class="t-logo edit-input" value="3" oninput="aggiornaTutto()"></td>
                 <td class="bg-green">€ <span class="res-pezzo">0.00</span></td>
                 <td class="bg-green" style="background:#c4d79b;">€ <span class="res-finale">0.00</span></td>
             </tr>
@@ -95,7 +94,7 @@
         function aggiornaTutto() {
             const b = parseFloat(document.getElementById("m-base").value) || 0;
             const h = parseFloat(document.getElementById("m-altezza").value) || 0;
-            const statoDisplay = document.getElementById("stato-testo");
+            const testoStato = document.getElementById("testo-stato");
             
             // Sincronizza valori nelle righe
             document.querySelectorAll(".t-base").forEach(el => el.value = b);
@@ -113,17 +112,19 @@
 
             if (unoStandard && !eccede200) {
                 riga1.classList.add("verde-chiaro");
-                statoDisplay.innerText = "MISURA STANDARD";
-            } else {
+                testoStato.innerText = "MISURA STANDARD";
+            } else if (!unoStandard || eccede200) {
                 riga2.classList.add("arancione-chiaro");
-                statoDisplay.innerText = "MISURA NON STANDARD";
+                testoStato.innerText = "MISURA NON STANDARD";
+            } else {
+                testoStato.innerText = "";
             }
 
             // Calcoli
             const righe = document.querySelectorAll("#corpo-tabella tr");
             righe.forEach((riga, index) => {
-                const trasp = 20; 
-                const logo = 3;   
+                const trasp = parseFloat(riga.querySelector(".t-trasp").value) || 0;
+                const logo = parseFloat(riga.querySelector(".t-logo").value) || 0;
                 
                 let mqPrezzo = (index === 0) ? 76 : (76 * 1.25);
                 let totMq = ((b * h) / 10000) * mqPrezzo;
