@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calcolatore Asciugapassi 2025 - FLOORMAD</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f0f2f5; padding: 20px; }
+        .container { max-width: 950px; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); margin: auto; }
+        h2 { color: #1a73e8; border-bottom: 2px solid #e8eaed; padding-bottom: 15px; margin-top: 0; }
+        .grid-input { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; margin-bottom: 30px; background: #f8f9fa; padding: 20px; border-radius: 8px; border: 1px solid #e8eaed; }
+        label { font-weight: 600; display: block; margin-bottom: 8px; color: #3c4043; }
+        input[type="number"] { width: 100%; padding: 10px; border: 2px solid #dadce0; border-radius: 6px; font-size: 16px; transition: border-color 0.2s; }
+        input[type="number"]:focus { border-color: #1a73e8; outline: none; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { border: 1px solid #e8eaed; padding: 15px; text-align: center; }
+        th { background-color: #1a73e8; color: white; font-weight: 500; text-transform: uppercase; font-size: 0.85em; }
+        .col-price { background-color: #f1f8e9; font-weight: bold; color: #2e7d32; }
+        .col-markup { background-color: #e3f2fd; font-weight: bold; color: #1565c0; }
+        .info-text { font-size: 0.85em; color: #70757a; margin-top: 20px; border-top: 1px solid #eee; padding-top: 15px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Listino ASCIUGAPASSI 2025</h2>
+    
+    <div class="grid-input">
+        <div>
+            <label>Larghezza (CM)</label>
+            <input type="number" id="inputE4" value="80" oninput="calculate()">
+        </div>
+        <div>
+            <label>Lunghezza (CM)</label>
+            <input type="number" id="inputG4" value="50" oninput="calculate()">
+        </div>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Descrizione</th>
+                <th>€/mq</th>
+                <th>Trasporto</th>
+                <th>Elab. Logo</th>
+                <th>€/Pezzo (Base)</th>
+                <th>RIC. +30%/+40%</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td style="text-align: left;">Qualità Stampa Standard 50dpi</td>
+                <td>€ 76.00</td>
+                <td>€ 20.00</td>
+                <td>€ 3.00</td>
+                <td class="col-price">€ <span id="totalStandard">0.00</span></td>
+                <td class="col-markup">€ <span id="markupStandard">0.00</span></td>
+            </tr>
+            <tr>
+                <td style="text-align: left;">Fuori Standard (+25%)</td>
+                <td>€ 95.00</td>
+                <td>€ 20.00</td>
+                <td>€ 3.00</td>
+                <td class="col-price">€ <span id="totalFS">0.00</span></td>
+                <td class="col-markup">€ <span id="markupFS">0.00</span></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="info-text">
+        Configurazione speculare al foglio Excel originale. <br>
+        <strong>Note:</strong> La colonna "RIC. +30%/+40%" applica un coefficiente di 1,82 al valore base per pezzo.
+    </div>
+</div>
+
+<script>
+    function calculate() {
+        // Input
+        const l = parseFloat(document.getElementById('inputE4').value) || 0;
+        const h = parseFloat(document.getElementById('inputG4').value) || 0;
+        
+        // Costanti
+        const mq = (l * h) / 10000;
+        const costiFissi = 20.00 + 3.00; // Trasporto + Logo
+        const coeffMarkup = 1.82;
+
+        // Calcolo Base (I8 e I9)
+        const baseStd = (mq * 76.00) + costiFissi;
+        const baseFS = (mq * 95.00) + costiFissi;
+
+        // Calcolo Ricarico (J8 e J9)
+        const ricStd = baseStd * coeffMarkup;
+        const ricFS = baseFS * coeffMarkup;
+
+        // Output
+        document.getElementById('totalStandard').innerText = baseStd.toFixed(2);
+        document.getElementById('totalFS').innerText = baseFS.toFixed(2);
+        
+        document.getElementById('markupStandard').innerText = ricStd.toFixed(2);
+        document.getElementById('markupFS').innerText = ricFS.toFixed(2);
+    }
+
+    // Init
+    window.onload = calculate;
+</script>
+
+</body>
+</html>
