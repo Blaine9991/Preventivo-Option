@@ -2,106 +2,111 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calcolatore Asciugapassi 2025 - FLOORMAD</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f0f2f5; padding: 20px; }
-        .container { max-width: 950px; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); margin: auto; }
-        h2 { color: #1a73e8; border-bottom: 2px solid #e8eaed; padding-bottom: 15px; margin-top: 0; }
-        .grid-input { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; margin-bottom: 30px; background: #f8f9fa; padding: 20px; border-radius: 8px; border: 1px solid #e8eaed; }
-        label { font-weight: 600; display: block; margin-bottom: 8px; color: #3c4043; }
-        input[type="number"] { width: 100%; padding: 10px; border: 2px solid #dadce0; border-radius: 6px; font-size: 16px; transition: border-color 0.2s; }
-        input[type="number"]:focus { border-color: #1a73e8; outline: none; }
+        body { font-family: 'Segoe UI', sans-serif; background-color: #f4f7f6; padding: 20px; color: #333; }
+        .container { max-width: 1000px; background: white; padding: 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); margin: auto; }
+        .header { border-bottom: 3px solid #0056b3; margin-bottom: 20px; padding-bottom: 10px; }
+        .inputs { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 20px; }
+        label { font-weight: bold; display: block; margin-bottom: 8px; }
+        input { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; font-size: 16px; box-sizing: border-box; }
         table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-        th, td { border: 1px solid #e8eaed; padding: 15px; text-align: center; }
-        th { background-color: #1a73e8; color: white; font-weight: 500; text-transform: uppercase; font-size: 0.85em; }
-        .col-price { background-color: #f1f8e9; font-weight: bold; color: #2e7d32; }
-        .col-markup { background-color: #e3f2fd; font-weight: bold; color: #1565c0; }
-        .info-text { font-size: 0.85em; color: #70757a; margin-top: 20px; border-top: 1px solid #eee; padding-top: 15px; }
+        th, td { border: 1px solid #e0e0e0; padding: 12px; text-align: center; }
+        th { background-color: #0056b3; color: white; font-size: 0.9em; }
+        .base-val { background-color: #fff9c4; font-weight: bold; }
+        .markup-val { background-color: #e3f2fd; font-weight: bold; color: #1565c0; }
+        .fixed-cost { color: #666; font-size: 0.9em; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h2>Listino ASCIUGAPASSI 2025</h2>
+    <div class="header">
+        <h2>Listino ZERB ASCIUGA ALLU - 2025</h2>
+    </div>
     
-    <div class="grid-input">
+    <div class="inputs">
         <div>
-            <label>Larghezza (CM)</label>
-            <input type="number" id="inputE4" value="80" oninput="calculate()">
+            <label>LARGHEZZA (CM) [E4]</label>
+            <input type="number" id="dimE4" value="80" oninput="runCalc()">
         </div>
         <div>
-            <label>Lunghezza (CM)</label>
-            <input type="number" id="inputG4" value="50" oninput="calculate()">
+            <label>LUNGHEZZA (CM) [G4]</label>
+            <input type="number" id="dimG4" value="50" oninput="runCalc()">
         </div>
     </div>
 
     <table>
         <thead>
             <tr>
-                <th>Descrizione</th>
-                <th>€/mq</th>
-                <th>Trasporto</th>
-                <th>Elab. Logo</th>
-                <th>€/Pezzo (Base)</th>
-                <th>RIC. +30%/+40%</th>
+                <th>DESCRIZIONE</th>
+                <th>MQ</th>
+                <th>€/MQ</th>
+                <th>VALORE MQ</th>
+                <th>TRASPORTO</th>
+                <th>LOGO</th>
+                <th>€/PEZZO (I8/I9)</th>
+                <th>RIC. +30%/+40% (J)</th>
             </tr>
         </thead>
         <tbody>
             <tr>
-                <td style="text-align: left;">Qualità Stampa Standard 50dpi</td>
-                <td>€ 76.00</td>
-                <td>€ 20.00</td>
-                <td>€ 3.00</td>
-                <td class="col-price">€ <span id="totalStandard">0.00</span></td>
-                <td class="col-markup">€ <span id="markupStandard">0.00</span></td>
+                <td style="text-align:left">Qualità Stampa Standard 50dpi</td>
+                <td id="mq_val">0.40</td>
+                <td>76.00</td>
+                <td id="val_mq_std">30.40</td>
+                <td class="fixed-cost">20.00</td>
+                <td class="fixed-cost">3.00</td>
+                <td class="base-val">€ <span id="total_std">53.40</span></td>
+                <td class="markup-val">€ <span id="ric_std">97.19</span></td>
             </tr>
             <tr>
-                <td style="text-align: left;">Fuori Standard (+25%)</td>
-                <td>€ 95.00</td>
-                <td>€ 20.00</td>
-                <td>€ 3.00</td>
-                <td class="col-price">€ <span id="totalFS">0.00</span></td>
-                <td class="col-markup">€ <span id="markupFS">0.00</span></td>
+                <td style="text-align:left">Fuori Standard (+25%)</td>
+                <td id="mq_val_fs">0.40</td>
+                <td>95.00</td>
+                <td id="val_mq_fs">38.00</td>
+                <td class="fixed-cost">20.00</td>
+                <td class="fixed-cost">3.00</td>
+                <td class="base-val">€ <span id="total_fs">61.00</span></td>
+                <td class="markup-val">€ <span id="ric_fs">111.02</span></td>
             </tr>
         </tbody>
     </table>
-
-    <div class="info-text">
-        Configurazione speculare al foglio Excel originale. <br>
-        <strong>Note:</strong> La colonna "RIC. +30%/+40%" applica un coefficiente di 1,82 al valore base per pezzo.
-    </div>
 </div>
 
 <script>
-    function calculate() {
-        // Input
-        const l = parseFloat(document.getElementById('inputE4').value) || 0;
-        const h = parseFloat(document.getElementById('inputG4').value) || 0;
+    function runCalc() {
+        const e4 = parseFloat(document.getElementById('dimE4').value) || 0;
+        const g4 = parseFloat(document.getElementById('dimG4').value) || 0;
         
-        // Costanti
-        const mq = (l * h) / 10000;
-        const costiFissi = 20.00 + 3.00; // Trasporto + Logo
-        const coeffMarkup = 1.82;
+        const mq = (e4 * g4) / 10000;
+        const trasporto = 20.00;
+        const logo = 3.00;
+        const coeff = 1.82;
 
-        // Calcolo Base (I8 e I9)
-        const baseStd = (mq * 76.00) + costiFissi;
-        const baseFS = (mq * 95.00) + costiFissi;
+        // Calcoli Standard
+        const valMqStd = mq * 76.00;
+        const totalI8 = valMqStd + trasporto + logo;
+        const totalJ8 = totalI8 * coeff;
 
-        // Calcolo Ricarico (J8 e J9)
-        const ricStd = baseStd * coeffMarkup;
-        const ricFS = baseFS * coeffMarkup;
+        // Calcoli Fuori Standard
+        const valMqFS = mq * 95.00;
+        const totalI9 = valMqFS + trasporto + logo;
+        const totalJ9 = totalI9 * coeff;
 
-        // Output
-        document.getElementById('totalStandard').innerText = baseStd.toFixed(2);
-        document.getElementById('totalFS').innerText = baseFS.toFixed(2);
+        // Aggiornamento UI
+        document.getElementById('mq_val').innerText = mq.toFixed(2);
+        document.getElementById('mq_val_fs').innerText = mq.toFixed(2);
+        document.getElementById('val_mq_std').innerText = valMqStd.toFixed(2);
+        document.getElementById('val_mq_fs').innerText = valMqFS.toFixed(2);
         
-        document.getElementById('markupStandard').innerText = ricStd.toFixed(2);
-        document.getElementById('markupFS').innerText = ricFS.toFixed(2);
+        document.getElementById('total_std').innerText = totalI8.toFixed(2);
+        document.getElementById('total_fs').innerText = totalI9.toFixed(2);
+        
+        document.getElementById('ric_std').innerText = totalJ8.toFixed(2);
+        document.getElementById('ric_fs').innerText = totalJ9.toFixed(2);
     }
-
-    // Init
-    window.onload = calculate;
+    window.onload = runCalc;
 </script>
 
 </body>
