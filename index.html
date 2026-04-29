@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Preventivatore ASCIUGAPASSI - Pro</title>
     <style>
-        body { font-family: 'Arial Black', Gadget, sans-serif; background: #fff; padding: 30px; }
+        body { font-family: Arial, sans-serif; background: #fff; padding: 30px; }
         
         /* SEZIONE INPUT SUPERIORE */
         .misura-container { display: flex; align-items: center; margin-bottom: 40px; }
@@ -20,45 +20,44 @@
         }
         .input-box-top { border: 3px solid #000; border-collapse: collapse; }
         .input-box-top td { border: 2px solid #000; height: 40px; text-align: center; min-width: 150px; }
-        .label-misura { background: #ffcc00; font-size: 24px; }
+        .label-misura { background: #ffcc00; font-size: 24px; font-weight: bold; }
         .valore-misura { background: #ffff00; }
         .valore-misura input { background: transparent; border: none; width: 100%; text-align: center; font-size: 28px; font-weight: bold; outline: none; }
 
         /* TABELLA PRINCIPALE */
         table.main-table { border-collapse: collapse; width: 100%; margin-top: 20px; }
-        .main-table th, .main-table td { border: 1px solid #000; padding: 8px; text-align: center; }
-        .option-header { background: #000; color: #ffff00; font-size: 32px; font-weight: bold; }
-        .header-grey { background: #d9d9d9; font-size: 12px; font-weight: normal; }
-        .header-orange { background: #ffc000; font-weight: bold; font-size: 18px; }
-        .bg-red { background: #ff0000; }
-        .bg-yellow { background: #ffff00; }
-        .bg-light-grey { background: #f2f2f2; }
-        .bg-green { background: #92d050; font-weight: bold; font-size: 18px; }
-        .bg-dark-green { background: #76933c; color: white; font-weight: bold; font-size: 18px; border-left: 3px solid #000 !important; }
+        .main-table th, .main-table td { border: 1px solid #000; padding: 10px; text-align: center; transition: background-color 0.2s; }
+        .option-header { background: #000; color: #ffff00; font-size: 28px; font-weight: bold; }
+        .header-grey { background: #d9d9d9; font-size: 11px; font-weight: normal; }
+        .header-orange { background: #ffc000; font-weight: bold; font-size: 16px; }
         
-        input.cell-input { width: 100%; border: none; background: transparent; text-align: center; font-size: 16px; font-family: inherit; font-weight: bold; }
-        .desc-col { text-align: left !important; font-size: 14px; width: 350px; }
+        /* Formattazione Condizionale Righe */
+        .row-standard-active { background-color: #d4edda !important; } /* Verde Chiaro */
+        .row-fuori-std-active { background-color: #fff3cd !important; } /* Arancione Chiaro */
+        
+        .bg-green-res { background: #92d050; font-weight: bold; }
+        .bg-dark-green-res { background: #76933c; color: white; font-weight: bold; }
+        
+        input.cell-input { width: 100%; border: none; background: transparent; text-align: center; font-size: 16px; font-weight: bold; pointer-events: none; }
+        .desc-col { text-align: left !important; font-size: 13px; width: 350px; font-weight: bold; }
+        .input-edit { width: 60px; border: 1px solid #ccc; text-align: center; }
     </style>
 </head>
 <body>
 
-    <!-- SEZIONE ALTA: INSERIMENTO MISURE -->
+    <!-- SEZIONE ALTA -->
     <div class="misura-container">
-        <div class="freccia-nera">
-            IMPOSTA MISURA<br>PERSONALIZZATA
-        </div>
+        <div class="freccia-nera">IMPOSTA MISURA<br>PERSONALIZZATA</div>
         <table class="input-box-top">
+            <tr><td colspan="2" class="label-misura">misura in CM</td></tr>
             <tr>
-                <td colspan="2" class="label-misura">misura in CM</td>
-            </tr>
-            <tr>
-                <td class="valore-misura"><input type="number" id="top-base" value="80" oninput="sincronizzaMisure()"></td>
-                <td class="valore-misura"><input type="number" id="top-altezza" value="50" oninput="sincronizzaMisure()"></td>
+                <td class="valore-misura"><input type="number" id="top-base" value="80" oninput="sincronizza()"></td>
+                <td class="valore-misura"><input type="number" id="top-altezza" value="50" oninput="sincronizza()"></td>
             </tr>
         </table>
     </div>
 
-    <!-- TABELLA RISULTATI -->
+    <!-- TABELLA -->
     <table class="main-table">
         <thead>
             <tr>
@@ -68,49 +67,75 @@
                 <th class="header-orange">€ 76,00</th>
                 <th class="header-grey">trasporto</th>
                 <th class="header-grey">costo<br>elaborazione logo</th>
-                <th class="bg-green">€/pezzo</th>
-                <th class="bg-dark-green">RICARICO<br>+30% +40%</th>
+                <th class="bg-green-res">€/pezzo</th>
+                <th class="bg-dark-green-res">RICARICO<br>+30% +40%</th>
             </tr>
         </thead>
         <tbody id="tabella-body">
-            <!-- RIGA STANDARD -->
-            <tr>
+            <tr id="riga-standard">
                 <td class="desc-col">con 1 lato 50-60-75-85-100-115-150-200</td>
-                <td class="bg-red"><input type="number" class="row-base" value="80" readonly></td>
-                <td class="bg-yellow"><input type="number" class="row-altezza" value="50" readonly></td>
-                <td class="bg-light-grey">€ <span class="res-mq">0.00</span></td>
-                <td class="bg-light-grey">€ <input type="number" class="row-trasp" value="20.00" oninput="calcola()"></td>
-                <td class="bg-light-grey">€ <input type="number" class="row-logo" value="3.00" oninput="calcola()"></td>
-                <td class="bg-green">€ <span class="res-pezzo">0.00</span></td>
-                <td class="bg-dark-green">€ <span class="res-finale">0.00</span></td>
+                <td><input type="number" class="row-base cell-input" value="80"></td>
+                <td><input type="number" class="row-altezza cell-input" value="50"></td>
+                <td>€ <span class="res-mq">0.00</span></td>
+                <td>€ <input type="number" class="row-trasp input-edit" value="20.00" oninput="calcola()"></td>
+                <td>€ <input type="number" class="row-logo input-edit" value="3.00" oninput="calcola()"></td>
+                <td class="bg-green-res">€ <span class="res-pezzo">0.00</span></td>
+                <td class="bg-dark-green-res">€ <span class="res-finale">0.00</span></td>
             </tr>
-            <!-- RIGA FUORI STANDARD -->
-            <tr>
+            <tr id="riga-fuori-std">
                 <td class="desc-col">fuori standard (prezzo +25%)</td>
-                <td class="bg-yellow"><input type="number" class="row-base" value="80" readonly></td>
-                <td class="bg-yellow"><input type="number" class="row-altezza" value="50" readonly></td>
-                <td class="bg-light-grey">€ <span class="res-mq">0.00</span></td>
-                <td class="bg-light-grey">€ <input type="number" class="row-trasp" value="20.00" oninput="calcola()"></td>
-                <td class="bg-light-grey">€ <input type="number" class="row-logo" value="3.00" oninput="calcola()"></td>
-                <td class="bg-green">€ <span class="res-pezzo">0.00</span></td>
-                <td class="bg-dark-green">€ <span class="res-finale">0.00</span></td>
+                <td><input type="number" class="row-base cell-input" value="80"></td>
+                <td><input type="number" class="row-altezza cell-input" value="50"></td>
+                <td>€ <span class="res-mq">0.00</span></td>
+                <td>€ <input type="number" class="row-trasp input-edit" value="20.00" oninput="calcola()"></td>
+                <td>€ <input type="number" class="row-logo input-edit" value="3.00" oninput="calcola()"></td>
+                <td class="bg-green-res">€ <span class="res-pezzo">0.00</span></td>
+                <td class="bg-dark-green-res">€ <span class="res-finale">0.00</span></td>
             </tr>
         </tbody>
     </table>
 
     <script>
-        function sincronizzaMisure() {
-            const b = document.getElementById("top-base").value;
-            const h = document.getElementById("top-altezza").value;
+        const standard = [50, 60, 75, 85, 100, 115, 150, 200];
+
+        function sincronizza() {
+            const b = parseFloat(document.getElementById("top-base").value) || 0;
+            const h = parseFloat(document.getElementById("top-altezza").value) || 0;
             
             document.querySelectorAll(".row-base").forEach(el => el.value = b);
             document.querySelectorAll(".row-altezza").forEach(el => el.value = h);
+            
+            aggiornaColori(b, h);
             calcola();
+        }
+
+        function aggiornaColori(b, h) {
+            const rigaStd = document.getElementById("riga-standard");
+            const rigaOut = document.getElementById("riga-fuori-std");
+            
+            // Reset colori
+            rigaStd.className = "";
+            rigaOut.className = "";
+
+            if (b === 0 || h === 0) return;
+
+            const bOk = standard.includes(b);
+            const hOk = standard.includes(h);
+            const eccede200 = (b > 200 || h > 200);
+
+            // LOGICA: Se almeno uno è standard E nessuno supera 200 -> Riga 1 Verde[cite: 1]
+            if ((bOk || hOk) && !eccede200) {
+                rigaStd.className = "row-standard-active";
+            } 
+            // ALTRIMENTI: Se nessuno è standard E/O uno supera 200 -> Riga 2 Arancione[cite: 1]
+            else {
+                rigaOut.className = "row-fuori-std-active";
+            }
         }
 
         function calcola() {
             const righe = document.querySelectorAll("#tabella-body tr");
-            const prezzoMqBase = 76.00;
+            const mqBase = 76.00;
 
             righe.forEach((riga, index) => {
                 const b = parseFloat(riga.querySelector(".row-base").value) || 0;
@@ -118,28 +143,18 @@
                 const trasp = parseFloat(riga.querySelector(".row-trasp").value) || 0;
                 const logo = parseFloat(riga.querySelector(".row-logo").value) || 0;
 
-                // Prezzo MQ: Standard (€76) o Fuori Standard (+25% = €95)
-                let prezzoMqCorrente = (index === 0) ? prezzoMqBase : (prezzoMqBase * 1.25);
-                
-                // Calcolo Area e Totale Area
-                let areaMq = (b * h) / 10000;
-                let totaleMq = areaMq * prezzoMqCorrente;
+                let mqPrezzo = (index === 0) ? mqBase : (mqBase * 1.25);
+                let totMq = ((b * h) / 10000) * mqPrezzo;
+                let prezzoPezzo = totMq + trasp + logo;
+                let ricaricato = prezzoPezzo * 1.3 * 1.4;
 
-                // Prezzo Base Pezzo
-                let prezzoPezzoStandard = totaleMq + trasp + logo;
-
-                // Tuo Ricarico Composto (+30% e poi +40%)[cite: 1]
-                let prezzoFinaleRicaricato = prezzoPezzoStandard * 1.3 * 1.4;
-
-                // Output nelle celle
-                riga.querySelector(".res-mq").innerText = totaleMq.toFixed(2);
-                riga.querySelector(".res-pezzo").innerText = prezzoPezzoStandard.toFixed(2);
-                riga.querySelector(".res-finale").innerText = prezzoFinaleRicaricato.toFixed(2);
+                riga.querySelector(".res-mq").innerText = totMq.toFixed(2);
+                riga.querySelector(".res-pezzo").innerText = prezzoPezzo.toFixed(2);
+                riga.querySelector(".res-finale").innerText = ricaricato.toFixed(2);
             });
         }
 
-        // Inizializza al caricamento
-        window.onload = calcola;
+        window.onload = sincronizza;
     </script>
 </body>
 </html>
