@@ -19,21 +19,18 @@
 
         /* TABELLA - BIANCA DI DEFAULT */
         .main-table { border-collapse: collapse; width: 100%; border: 1px solid #000; }
-        .main-table th, .main-table td { border: 1px solid #000; padding: 8px; text-align: center; background-color: #ffffff; }
+        .main-table th, .main-table td { border: 1px solid #000; padding: 12px; text-align: center; background-color: #ffffff; }
         
-        /* INTESTAZIONE FISSA */
-        .header-option { background: #000 !important; color: #ffff00 !important; font-weight: bold; font-size: 24px; }
-        .header-grey { background: #d9d9d9 !important; font-size: 11px; }
-        .header-orange { background: #ffc000 !important; font-weight: bold; }
-        .bg-green-header { background: #92d050 !important; font-weight: bold; }
-        .bg-ricarico-header { background: #76933c !important; color: white !important; }
+        /* INTESTAZIONE */
+        .header-option { background: #000 !important; color: #ffff00 !important; font-weight: bold; font-size: 24px; width: 40%; }
+        .header-grey { background: #d9d9d9 !important; font-weight: bold; }
+        .header-prz-vendita { background: #76933c !important; color: white !important; font-weight: bold; }
 
         /* FORMATTAZIONE CONDIZIONALE */
         .verde-standard td { background-color: #90EE90 !important; }
         .arancio-fuori-standard td { background-color: #FFCC99 !important; }
 
-        /* INPUT MISURE SOLA LETTURA */
-        input.readonly-input { border: none; background: transparent; text-align: center; width: 100%; font-size: 14px; pointer-events: none; outline: none; }
+        input.readonly-input { border: none; background: transparent; text-align: center; width: 100%; font-size: 16px; pointer-events: none; outline: none; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -53,37 +50,21 @@
     <table class="main-table">
         <thead>
             <tr>
-                <th rowspan="2" class="header-option">OPTION</th>
-                <th class="header-grey">qualità stampa standard<br>50dpi. Lavabile a 30°C in<br>lavatrice industriale</th>
+                <th class="header-option">OPTION</th>
                 <th class="header-grey">€/mq</th>
-                <th class="header-orange">€ 76,00</th>
-                <th class="header-grey">trasporto</th>
-                <th class="header-grey">costo<br>elaborazione logo</th>
-                <th class="bg-green-header">€/pezzo</th>
-                <th class="bg-ricarico-header">RICARICO<br>+30% +40%</th>
+                <th class="header-prz-vendita">PRZ. VENDITA</th>
             </tr>
         </thead>
         <tbody id="corpo-tabella">
             <tr id="riga1">
-                <td style="text-align:left; font-size:12px; width:300px;">con 1 lato 50-60-75-85-100-115-150-200</td>
-                <td><input type="number" class="t-base readonly-input" value="0"></td>
-                <td><input type="number" class="t-altezza readonly-input" value="0"></td>
+                <td style="text-align:left; font-size:14px;">con 1 lato 50-60-75-85-100-115-150-200</td>
                 <td>€ <span class="res-mq">0.00</span></td>
-                <!-- CELLE TESTUALI NON MODIFICABILI -->
-                <td>€ 20</td>
-                <td>€ 3</td>
-                <td>€ <span class="res-pezzo">0.00</span></td>
-                <td>€ <span class="res-finale">0.00</span></td>
+                <td>€ <span class="res-finale" style="font-weight:bold; font-size: 1.2em;">0.00</span></td>
             </tr>
             <tr id="riga2">
-                <td style="text-align:left; font-size:12px;">fuori standard (prezzo +25%)</td>
-                <td><input type="number" class="t-base readonly-input" value="0"></td>
-                <td><input type="number" class="t-altezza readonly-input" value="0"></td>
+                <td style="text-align:left; font-size:14px;">fuori standard (prezzo +25%)</td>
                 <td>€ <span class="res-mq">0.00</span></td>
-                <td>€ 20</td>
-                <td>€ 3</td>
-                <td>€ <span class="res-pezzo">0.00</span></td>
-                <td>€ <span class="res-finale">0.00</span></td>
+                <td>€ <span class="res-finale" style="font-weight:bold; font-size: 1.2em;">0.00</span></td>
             </tr>
         </tbody>
     </table>
@@ -98,9 +79,6 @@
             const h = parseFloat(document.getElementById("m-altezza").value) || 0;
             const testoStato = document.getElementById("testo-stato");
             
-            document.querySelectorAll(".t-base").forEach(el => el.value = b);
-            document.querySelectorAll(".t-altezza").forEach(el => el.value = h);
-
             const r1 = document.getElementById("riga1");
             const r2 = document.getElementById("riga2");
 
@@ -108,7 +86,10 @@
             r2.className = "";
             testoStato.innerText = "";
 
-            if (b === 0 && h === 0) return;
+            if (b === 0 && h === 0) {
+                document.querySelectorAll(".res-mq, .res-finale").forEach(el => el.innerText = "0.00");
+                return;
+            }
 
             const unoStandard = misureStandard.includes(b) || misureStandard.includes(h);
             const eccede200 = b > 200 || h > 200;
@@ -125,12 +106,14 @@
 
             [r1, r2].forEach((riga, index) => {
                 let pMq = (index === 0) ? 76 : (76 * 1.25);
-                let totMq = ((b * h) / 10000) * pMq;
+                let mqArea = (b * h) / 10000;
+                let totMq = mqArea * pMq;
+                
+                // Calcolo interno: (Prezzo MQ + Trasporto + Logo) * 1.3 * 1.4
                 let pPezzo = totMq + COSTO_TRASPORTO + COSTO_LOGO;
                 let finale = pPezzo * 1.3 * 1.4;
 
                 riga.querySelector(".res-mq").innerText = totMq.toFixed(2);
-                riga.querySelector(".res-pezzo").innerText = pPezzo.toFixed(2);
                 riga.querySelector(".res-finale").innerText = finale.toFixed(2);
             });
         }
