@@ -2,11 +2,11 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <title>Preventivatore ASCIUGAPASSI - Finale</title>
+    <title>Preventivatore ASCIUGAPASSI</title>
     <style>
-        body { font-family: Arial, sans-serif; padding: 20px; background: #fff; }
+        body { font-family: Arial, sans-serif; padding: 20px; }
         
-        /* SEZIONE MISURE IN ALTO SEPARATA */
+        /* SEZIONE MISURE IN ALTO */
         .sezione-misure { margin-bottom: 50px; display: flex; align-items: center; }
         .freccia-box { background: #333; color: #ffcc00; padding: 15px 30px; font-weight: bold; font-size: 18px; text-align: center; margin-right: 20px; }
         .tabella-misure { border-collapse: collapse; border: 2px solid #000; margin-right: 25px; }
@@ -15,29 +15,26 @@
         .input-misura { background: #ffff00; }
         .input-misura input { width: 100%; border: none; background: transparent; text-align: center; font-size: 20px; font-weight: bold; outline: none; }
 
-        /* INDICATORE DI STATO */
-        #stato-misura { font-size: 24px; font-weight: bold; text-transform: uppercase; }
-        .testo-verde { color: #28a745; }
-        .testo-arancio { color: #fd7e14; }
+        #stato-misura { font-size: 24px; font-weight: bold; color: #28a745; }
 
-        /* TABELLA CONTENUTO */
-        .main-table { border-collapse: collapse; width: 100%; border: 1px solid #000; }
-        .main-table th, .main-table td { border: 1px solid #000; padding: 8px; text-align: center; }
+        /* TABELLA - REPLICA ESATTA IMMAGINE */
+        .main-table { border-collapse: collapse; width: 100%; }
+        .main-table th, .main-table td { border: 1px solid #777; padding: 8px; text-align: center; }
         .header-option { background: #000; color: #ffff00; font-weight: bold; font-size: 24px; }
-        .header-grey { background: #d9d9d9; font-size: 11px; font-weight: normal; }
+        .header-grey { background: #d9d9d9; font-size: 11px; }
         .header-orange { background: #ffc000; font-weight: bold; }
         .bg-green { background: #92d050; font-weight: bold; }
         
-        /* FORMATTAZIONE CONDIZIONALE RIGHE */
-        .verde-chiaro { background-color: #d4edda !important; } /* Verde successo */
-        .arancione-chiaro { background-color: #fff3cd !important; } /* Arancio/Giallo avviso */
+        /* FORMATTAZIONE CONDIZIONALE */
+        .verde-chiaro { background-color: #90EE90 !important; }
+        .arancione-chiaro { background-color: #FFCC99 !important; }
 
-        input.readonly-input { border: none; background: transparent; text-align: center; width: 100%; font-size: 14px; pointer-events: none; font-weight: bold; }
+        input.readonly-input { border: none; background: transparent; text-align: center; width: 100%; font-size: 16px; pointer-events: none; font-weight: bold; }
     </style>
 </head>
 <body>
 
-    <!-- SEZIONE IN ALTO: MISURE PERSONALIZZATE -->
+    <!-- SEZIONE SUPERIORE -->
     <div class="sezione-misure">
         <div class="freccia-box">IMPOSTA MISURA<br>PERSONALIZZATA</div>
         <table class="tabella-misure">
@@ -47,11 +44,10 @@
                 <td class="input-misura"><input type="number" id="m-altezza" value="50" oninput="aggiornaTutto()"></td>
             </tr>
         </table>
-        <!-- TESTO DINAMICO A DESTRA -->
         <div id="stato-misura"></div>
     </div>
 
-    <!-- TABELLA PRINCIPALE REPLICATA -->
+    <!-- TABELLA (ORDINE COLONNE ORIGINALE) -->
     <table class="main-table">
         <thead>
             <tr>
@@ -67,22 +63,22 @@
         </thead>
         <tbody id="corpo-tabella">
             <tr id="riga1">
-                <td style="text-align:left; font-size:12px; width:300px; font-weight:bold;">con 1 lato 50-60-75-85-100-115-150-200</td>
+                <td style="text-align:left; font-size:12px; width:300px;">con 1 lato 50-60-75-85-100-115-150-200</td>
                 <td style="background:red;"><input type="number" class="t-base readonly-input" value="80"></td>
                 <td style="background:yellow;"><input type="number" class="t-altezza readonly-input" value="50"></td>
                 <td>€ <span class="res-mq">0.00</span></td>
-                <td>€ <span class="val-trasp">20.00</span></td>
-                <td>€ <span class="val-logo">3.00</span></td>
+                <td>€ 20.00</td>
+                <td>€ 3.00</td>
                 <td class="bg-green">€ <span class="res-pezzo">0.00</span></td>
                 <td class="bg-green" style="background:#c4d79b;">€ <span class="res-finale">0.00</span></td>
             </tr>
             <tr id="riga2">
-                <td style="text-align:left; font-size:12px; font-weight:bold;">fuori standard (prezzo +25%)</td>
+                <td style="text-align:left; font-size:12px;">fuori standard (prezzo +25%)</td>
                 <td style="background:yellow;"><input type="number" class="t-base readonly-input" value="80"></td>
                 <td style="background:yellow;"><input type="number" class="t-altezza readonly-input" value="50"></td>
                 <td>€ <span class="res-mq">0.00</span></td>
-                <td>€ <span class="val-trasp">20.00</span></td>
-                <td>€ <span class="val-logo">3.00</span></td>
+                <td>€ 20.00</td>
+                <td>€ 3.00</td>
                 <td class="bg-green">€ <span class="res-pezzo">0.00</span></td>
                 <td class="bg-green" style="background:#c4d79b;">€ <span class="res-finale">0.00</span></td>
             </tr>
@@ -96,7 +92,6 @@
             const b = parseFloat(document.getElementById("m-base").value) || 0;
             const h = parseFloat(document.getElementById("m-altezza").value) || 0;
             
-            // Sincronizza valori nelle righe (sola lettura)
             document.querySelectorAll(".t-base").forEach(el => el.value = b);
             document.querySelectorAll(".t-altezza").forEach(el => el.value = h);
 
@@ -104,39 +99,28 @@
             const riga2 = document.getElementById("riga2");
             const indicator = document.getElementById("stato-misura");
             
-            // Reset stati
-            riga1.classList.remove("verde-chiaro");
-            riga2.classList.remove("arancione-chiaro");
+            riga1.className = "";
+            riga2.className = "";
             indicator.innerText = "";
-            indicator.className = "";
 
             if (b > 0 && h > 0) {
                 const unoStandard = misureStandard.includes(b) || misureStandard.includes(h);
                 const eccede200 = b > 200 || h > 200;
 
-                // CASO 1: Standard
                 if (unoStandard && !eccede200) {
-                    riga1.classList.add("verde-chiaro");
+                    riga1.className = "verde-chiaro";
                     indicator.innerText = "MISURA STANDARD";
-                    indicator.classList.add("testo-verde");
-                } 
-                // CASO 2: Non Standard
-                else {
-                    riga2.classList.add("arancione-chiaro");
+                } else {
+                    riga2.className = "arancione-chiaro";
                     indicator.innerText = "MISURA NON STANDARD";
-                    indicator.classList.add("testo-verde"); // Richiesto esplicitamente colore verde anche per non standard
                 }
             }
 
-            // Calcoli
             const righe = document.querySelectorAll("#corpo-tabella tr");
             righe.forEach((riga, index) => {
-                const trasp = 20.00; // Valore fisso non modificabile
-                const logo = 3.00;   // Valore fisso non modificabile
-                
                 let mqPrezzo = (index === 0) ? 76 : (76 * 1.25);
                 let totMq = ((b * h) / 10000) * mqPrezzo;
-                let prezzoPezzo = totMq + trasp + logo;
+                let prezzoPezzo = totMq + 20 + 3; // Trasporto e logo fissi
                 let finale = prezzoPezzo * 1.3 * 1.4;
 
                 riga.querySelector(".res-mq").innerText = totMq.toFixed(2);
